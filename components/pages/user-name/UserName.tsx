@@ -1,8 +1,24 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import React from "react";
 
 export default function Home() {
+  const [name, setName] = React.useState('');
+
+  React.useEffect(() => {
+    const storedName = localStorage.getItem('name');
+    if (storedName) {
+      setName(storedName);
+    }
+  }, []);
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+    localStorage.setItem('name', e.target.value);
+  };
+
   return (
     <div
       className="flex flex-col items-center min-h-screen bg-center justify-around"
@@ -24,6 +40,8 @@ export default function Home() {
           type="text"
           placeholder="Enter your name"
           className="bg-[#D9D9D9] bg-opacity-60 rounded-2xl p-6 text-3xl placeholder:text-black"
+          value={name}
+          onChange={handleNameChange}
         />
       </div>
       <div className="flex gap-4">
@@ -36,5 +54,4 @@ export default function Home() {
     </div>
   );
 }
-
 

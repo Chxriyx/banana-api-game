@@ -37,8 +37,8 @@ export default function Home() {
     });
   };
 
-  const handleAnswerClick = (num) => {
-    setSelectedAnswer(num);
+  const handleAnswerClick = (num: number) => {
+    setSelectedAnswer(num as any);
     setIsCorrect(num === data.solution);
     const popup = document.getElementById("popup") as HTMLDivElement;
     const popupContent = popup.querySelector(".popup-content") as HTMLDivElement;
@@ -52,13 +52,6 @@ export default function Home() {
     } else {
       popupText.textContent = "Wrong!";
       popupText.style.color = "#FF0000";
-      const closeButton = document.createElement("button");
-      closeButton.textContent = "Close";
-      closeButton.className = "popup-button mt-8 bg-orange-500 px-12 py-4 rounded-full text-black font-bold block mx-auto";
-      closeButton.onclick = () => {
-        popup.style.display = "none";
-      };
-      popupContent.appendChild(closeButton);
     }
   };
 
@@ -142,15 +135,17 @@ export default function Home() {
                   className="bg-orange-500 px-8 py-2 rounded-full text-black font-bold"
                   onClick={restartGame}
                 >
-                  Restart
+                  {isCorrect ? "Close" : "Restart"}
                 </button>
-                <Link href="/leader-board">
-                  <button
-                    className="bg-orange-500 px-8 py-2 rounded-full text-black font-bold"
-                  >
-                    Finish
-                  </button>
-                </Link>
+                {isCorrect ? null : (
+                  <Link href="/leader-board">
+                    <button
+                      className="bg-orange-500 px-8 py-2 rounded-full text-black font-bold"
+                    >
+                      Finish
+                    </button>
+                  </Link>
+                )}
               </div>
             </div>
           </div>
