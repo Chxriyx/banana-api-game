@@ -6,7 +6,7 @@ import React, { useState, useEffect } from "react";
 
 export default function Home() {
   const [data, setData] = React.useState<null | any>(null);
-  const [timeLeft, setTimeLeft] = React.useState(60);
+  const [timeLeft, setTimeLeft] = React.useState(10);
   const [selectedAnswer, setSelectedAnswer] = React.useState(null);
   const [isCorrect, setIsCorrect] = React.useState(null);
 
@@ -17,14 +17,18 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (timeLeft <= 0) {
+      showGameOverPopup();
+      return;
+    }
     const timer = setInterval(() => {
       setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
     }, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [timeLeft]);
 
   const restartGame = () => {
-    setTimeLeft(60);
+    setTimeLeft(10);
     setData(null);
     setSelectedAnswer(null);
     setIsCorrect(null);
@@ -32,7 +36,6 @@ export default function Home() {
       setData(res.data);
     });
   };
-
 
   const handleAnswerClick = (num) => {
     setSelectedAnswer(num);
@@ -49,13 +52,24 @@ export default function Home() {
     } else {
       popupText.textContent = "Wrong!";
       popupText.style.color = "#FF0000";
-    }
-    setTimeout(() => {
-      popupContent.style.animation = "popup-close 0.5s ease-in-out";
-      setTimeout(() => {
+      const closeButton = document.createElement("button");
+      closeButton.textContent = "Close";
+      closeButton.className = "popup-button mt-8 bg-orange-500 px-12 py-4 rounded-full text-black font-bold block mx-auto";
+      closeButton.onclick = () => {
         popup.style.display = "none";
-      }, 500);
-    }, 1500);
+      };
+      popupContent.appendChild(closeButton);
+    }
+  };
+
+  const showGameOverPopup = () => {
+    const popup = document.getElementById("popup") as HTMLDivElement;
+    const popupContent = popup.querySelector(".popup-content") as HTMLDivElement;
+    const popupText = popup.querySelector(".popup-text") as HTMLDivElement;
+    popup.style.display = "flex";
+    popupContent.style.animation = "popup-open ease-in-out";
+    popupText.textContent = "Game Over!";
+    popupText.style.color = "#FF0000";
   };
 
   return (
@@ -63,7 +77,7 @@ export default function Home() {
       className="flex flex-col items-center min-h-screen bg-center justify-around"
       style={{ backgroundImage: "url('/images/banana-game-bg-img.png')" }}
     >
-        <Link href="/dificulty-level">
+      <Link href="/dificulty-level">
         <Button className="absolute top-4 left-4 border border-gray-500 rounded-full p-2">
           <span className="sr-only">Go back</span>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -119,19 +133,25 @@ export default function Home() {
             className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden"
           >
             <div
-              className="popup-content p-4 rounded-lg bg-white"
+              className="popup-content p-8 rounded-lg bg-white"
               style={{ width: "400px" }}
             >
-              <div className="popup-text text-4xl font-bold text-center"></div>
-              <button
-                className="popup-button mt-8 bg-orange-500 px-12 py-4 rounded-full text-black font-bold block mx-auto"
-                onClick={() => {
-                  const popup = document.getElementById("popup") as HTMLDivElement;
-                  popup.style.display = "none";
-                }}
-              >
-                Close
-              </button>
+              <div className="popup-text text-4xl font-bold text-center mb-6"></div>
+              <div className="flex justify-center gap-3 mt-4">
+                <button
+                  className="bg-orange-500 px-8 py-2 rounded-full text-black font-bold"
+                  onClick={restartGame}
+                >
+                  Restart
+                </button>
+                <Link href="/leader-board">
+                  <button
+                    className="bg-orange-500 px-8 py-2 rounded-full text-black font-bold"
+                  >
+                    Finish
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
