@@ -40,7 +40,6 @@ export default function Home() {
     const popup = document.getElementById("popup") as HTMLDivElement;
     const popupContent = popup.querySelector(".popup-content") as HTMLDivElement;
     const popupText = popup.querySelector(".popup-text") as HTMLDivElement;
-    const popupButton = popup.querySelector(".popup-button") as HTMLButtonElement;
     popup.style.display = "flex";
     popupContent.style.animation = "popup-open 0.5s ease-in-out";
     if (num === data.solution) {
