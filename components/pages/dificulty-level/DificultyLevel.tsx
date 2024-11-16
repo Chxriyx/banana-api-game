@@ -19,17 +19,17 @@ export default function Home() {
       Choose a Difficulty Level
       </h1>
         <div className="grid">
-            <Link href="/banana-game">
+            <Link href={{ pathname: "/banana-game", query: { difficulty: "Easy" } }}>
                 <Button className="bg-orange-500 px-24 py-12 rounded-full text-black font-bold mb-8">
                 <span className="text-5xl">Easy</span>
                 </Button>
             </Link>
-            <Link href="/banana-game">
+            <Link href={{ pathname: "/banana-game", query: { difficulty: "Medium" } }}>
                 <Button className="bg-orange-500 px-16 py-12 rounded-full text-black font-bold my-8">
                 <span className="text-5xl">Medium</span>
                 </Button>
             </Link>
-            <Link href="/banana-game">
+            <Link href={{ pathname: "/banana-game", query: { difficulty: "Hard" } }}>
                 <Button className="bg-orange-500 px-24 py-12 rounded-full text-black font-bold my-8">
                 <span className="text-5xl">Hard</span>
                 </Button>

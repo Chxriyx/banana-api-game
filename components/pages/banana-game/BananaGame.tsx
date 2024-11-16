@@ -6,11 +6,27 @@ import React, { useState, useEffect } from "react";
 
 export default function Home() {
   const [data, setData] = React.useState<null | any>(null);
-  const [timeLeft, setTimeLeft] = React.useState(10);
+  const [timeLeft, setTimeLeft] = React.useState<number>(0);
   const [selectedAnswer, setSelectedAnswer] = React.useState(null);
   const [isCorrect, setIsCorrect] = React.useState(null);
 
   useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    const difficulty = query.get("difficulty");
+
+    switch (difficulty) {
+      case "Easy":
+        setTimeLeft(30);
+        break;
+      case "Medium":
+        setTimeLeft(20);
+        break;
+      case "Hard":
+      default:
+        setTimeLeft(10);
+        break;
+    }
+
     axios.get("https://marcconrad.com/uob/banana/api.php").then((res) => {
       setData(res.data);
     });
@@ -28,7 +44,22 @@ export default function Home() {
   }, [timeLeft]);
 
   const restartGame = () => {
-    setTimeLeft(10);
+    const query = new URLSearchParams(window.location.search);
+    const difficulty = query.get("difficulty");
+
+    switch (difficulty) {
+      case "Easy":
+        setTimeLeft(30);
+        break;
+      case "Medium":
+        setTimeLeft(20);
+        break;
+      case "Hard":
+      default:
+        setTimeLeft(10);
+        break;
+    }
+
     setData(null);
     setSelectedAnswer(null);
     setIsCorrect(null);
@@ -40,29 +71,33 @@ export default function Home() {
   const handleAnswerClick = (num: number) => {
     setSelectedAnswer(num as any);
     setIsCorrect(num === data.solution);
-    const popup = document.getElementById("popup") as HTMLDivElement;
-    const popupContent = popup.querySelector(".popup-content") as HTMLDivElement;
-    const popupText = popup.querySelector(".popup-text") as HTMLDivElement;
-    popup.style.display = "flex";
-    popupContent.style.animation = "popup-open 0.5s ease-in-out";
-    if (num === data.solution) {
-      popupText.textContent = "Correct!";
-      popupText.style.color = "#34C759";
-      setTimeout(restartGame, 1500);
-    } else {
-      popupText.textContent = "Wrong!";
-      popupText.style.color = "#FF0000";
+    const popup = document.getElementById("popup");
+    if (popup) {
+      const popupContent = popup.querySelector(".popup-content") as HTMLDivElement;
+      const popupText = popup.querySelector(".popup-text") as HTMLDivElement;
+      popup.style.display = "flex";
+      popupContent.style.animation = "popup-open 0.5s ease-in-out";
+      if (num === data.solution) {
+        popupText.textContent = "Correct!";
+        popupText.style.color = "#34C759";
+        setTimeout(restartGame, 1500);
+      } else {
+        popupText.textContent = "Wrong!";
+        popupText.style.color = "#FF0000";
+      }
     }
   };
 
   const showGameOverPopup = () => {
-    const popup = document.getElementById("popup") as HTMLDivElement;
-    const popupContent = popup.querySelector(".popup-content") as HTMLDivElement;
-    const popupText = popup.querySelector(".popup-text") as HTMLDivElement;
-    popup.style.display = "flex";
-    popupContent.style.animation = "popup-open ease-in-out";
-    popupText.textContent = "Game Over!";
-    popupText.style.color = "#FF0000";
+    const popup = document.getElementById("popup");
+    if (popup) {
+      const popupContent = popup.querySelector(".popup-content") as HTMLDivElement;
+      const popupText = popup.querySelector(".popup-text") as HTMLDivElement;
+      popup.style.display = "flex";
+      popupContent.style.animation = "popup-open ease-in-out";
+      popupText.textContent = "Game Over!";
+      popupText.style.color = "#FF0000";
+    }
   };
 
   return (
@@ -156,4 +191,5 @@ export default function Home() {
     </div>
   );
 }
+
 
