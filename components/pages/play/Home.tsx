@@ -11,9 +11,9 @@ export default function Home() {
         Banana Quiz
       </h1>
       <div className="flex justify-center animate-bounce">
-        <Link href="/play">
-          <Button className="bg-orange-500 px-24 py-12 rounded-full text-black font-bold transition-all duration-500">
-            <span className="text-5xl animate-bounce-text">Play</span>
+        <Link href="/user-name">
+          <Button className="bg-orange-500 px-24 py-12 rounded-full text-black font-bold">
+            <span className="text-5xl">Play</span>
           </Button>
         </Link>
       </div>
