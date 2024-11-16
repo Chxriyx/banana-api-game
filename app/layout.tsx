@@ -8,7 +8,6 @@ export const metadata = {
   title: "Banana Game",
 };
 
-
 export default function RootLayout({
   children,
 }: {
@@ -18,9 +17,15 @@ export default function RootLayout({
     <html lang="en" className={GeistSans.className}>
       <head>
       </head>
-      <body>
-            <main>{children}</main>
+      <body className="bg-[#1A202C]">
+        <audio
+          src="/sounds/banana-game-intro.mp3"
+          autoPlay={true}
+          loop={true}
+        />
+        <main>{children}</main>
       </body>
     </html>
   );
 }
+
