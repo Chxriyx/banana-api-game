@@ -106,11 +106,11 @@ export default function Home() {
       style={{ backgroundImage: "url('/images/banana-game-bg-img.png')" }}
     >
       <Link href="/dificulty-level">
-        <Button className="absolute top-4 left-4 border border-gray-500 rounded-full p-2">
-          <span className="sr-only">Go back</span>
+        <Button className="bg-orange-500 text-black text-2xl font-bold absolute top-4 left-4 border border-black rounded-full p-6 mt-5">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
+          <span className="mx-4">Back</span>
         </Button>
       </Link>
       {data ? (
