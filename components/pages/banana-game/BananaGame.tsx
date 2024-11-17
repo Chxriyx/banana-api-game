@@ -2,13 +2,13 @@
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
-  const [data, setData] = React.useState<null | any>(null);
-  const [timeLeft, setTimeLeft] = React.useState<number>(0);
-  const [selectedAnswer, setSelectedAnswer] = React.useState(null);
-  const [isCorrect, setIsCorrect] = React.useState(null);
+  const [data, setData] = useState<null | any>(null);
+  const [timeLeft, setTimeLeft] = useState<number>(0);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [isCorrect, setIsCorrect] = useState(null);
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);

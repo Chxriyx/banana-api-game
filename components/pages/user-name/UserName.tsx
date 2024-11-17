@@ -2,12 +2,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Home() {
-  const [name, setName] = React.useState('');
+  const [name, setName] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     const storedName = localStorage.getItem('name');
     if (storedName) {
       setName(storedName);
