@@ -105,7 +105,7 @@ export default function Home() {
       className="flex flex-col items-center min-h-screen bg-center justify-around"
       style={{ backgroundImage: "url('/images/banana-game-bg-img.png')" }}
     >
-      <Link href="/dificulty-level">
+      <Link href="/protected/dificulty-level">
         <Button className="bg-orange-500 text-black text-2xl font-bold absolute top-4 left-4 border border-black rounded-full p-6 mt-5">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -148,7 +148,7 @@ export default function Home() {
             >
               Restart
             </button>
-            <Link href="/leader-board">
+            <Link href="/protected/leader-board">
               <button
                 className="bg-orange-500 px-12 py-4 rounded-full text-black font-bold my-8 text-3xl"
               >
@@ -173,7 +173,7 @@ export default function Home() {
                   {isCorrect ? "Close" : "Restart"}
                 </button>
                 {isCorrect ? null : (
-                  <Link href="/leader-board">
+                  <Link href="/protected/leader-board">
                     <button
                       className="bg-orange-500 px-8 py-2 rounded-full text-black font-bold"
                     >
