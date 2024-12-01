@@ -2,21 +2,31 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 
 export default function Home() {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
+  const [error, setError] = useState(false);
 
-  useEffect(() => {
-    const storedName = localStorage.getItem('name');
-    if (storedName) {
-      setName(storedName);
+  const handleSubmit = async () => {
+    if (name.trim() === "") {
+      setError(true);
+      return;
     }
-  }, []);
+    setError(false);
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
+    
+    const { error: err } = await supabase.from("user_names").insert({ name });
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-    localStorage.setItem('name', e.target.value);
+    if (err) {
+      console.error("Error inserting name:", err.message);
+    } else {
+      console.log("Name inserted successfully");
+      window.location.href = "/protected/dificulty-level";
+    }
   };
 
   return (
@@ -39,19 +49,24 @@ export default function Home() {
         <Input
           type="text"
           placeholder="Enter your name"
-          className="bg-[#D9D9D9] bg-opacity-60 rounded-2xl p-6 text-3xl placeholder:text-black"
           value={name}
-          onChange={handleNameChange}
+          onChange={(e) => setName(e.target.value)}
+          required
+          className="bg-[#D9D9D9] bg-opacity-60 rounded-2xl p-6 text-3xl placeholder:text-black"
         />
+        {error && <p className="text-red-500 bg-red-200 border-l-2 border-red-500 pl-2 mt-2">Name is required</p>}
+
       </div>
       <div className="flex gap-4">
-        <Link href="/protected/dificulty-level">
-          <Button className="bg-orange-500 px-24 py-12 rounded-full text-black font-bold">
-            <span className="text-5xl">Submit</span>
-          </Button>
-        </Link>
+        <Button
+          onClick={handleSubmit}
+          className="bg-orange-500 px-24 py-12 rounded-full text-black font-bold"
+        >
+          <span className="text-5xl">Submit</span>
+        </Button>
       </div>
     </div>
   );
 }
+
 
