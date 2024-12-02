@@ -3,16 +3,27 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { createClient } from "@supabase/supabase-js";
 
 export default function Home() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
   const [data, setData] = useState<null | any>(null);
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [showFinishModal, setShowFinishModal] = useState(false);
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     const difficulty = query.get("difficulty");
+    const userEmailParam = query.get("user_email");
+
+    if (userEmailParam) {
+      setUserEmail(userEmailParam);
+    }
 
     switch (difficulty) {
       case "Easy":
@@ -71,17 +82,15 @@ export default function Home() {
   const handleAnswerClick = (num: number) => {
     setSelectedAnswer(num as any);
     setIsCorrect(num === data.solution);
-    const popup = document.getElementById("popup");
-    if (popup) {
-      const popupContent = popup.querySelector(".popup-content") as HTMLDivElement;
-      const popupText = popup.querySelector(".popup-text") as HTMLDivElement;
-      popup.style.display = "flex";
-      popupContent.style.animation = "popup-open 0.5s ease-in-out";
-      if (num === data.solution) {
-        popupText.textContent = "Correct!";
-        popupText.style.color = "#34C759";
-        setTimeout(restartGame, 1500);
-      } else {
+    if (num === data.solution) {
+      setShowFinishModal(true);
+    } else {
+      const popup = document.getElementById("popup");
+      if (popup) {
+        const popupContent = popup.querySelector(".popup-content") as HTMLDivElement;
+        const popupText = popup.querySelector(".popup-text") as HTMLDivElement;
+        popup.style.display = "flex";
+        popupContent.style.animation = "popup-open 0.5s ease-in-out";
         popupText.textContent = "Wrong!";
         popupText.style.color = "#FF0000";
       }
@@ -98,6 +107,26 @@ export default function Home() {
       popupText.textContent = "Game Over!";
       popupText.style.color = "#FF0000";
     }
+  };
+
+  const saveScore = () => {
+    const query = new URLSearchParams(window.location.search);
+    const difficulty = query.get("difficulty");
+
+    supabase
+      .from("scores")
+      .insert({
+        user_email: userEmail,
+        difficulty,
+        score: timeLeft,
+      })
+      .then(({ data }) => {
+        if (data) {
+          console.log("Score saved successfully");
+        } else {
+          console.log("Error saving score");
+        }
+      });
   };
 
   return (
@@ -124,6 +153,7 @@ export default function Home() {
             className="mx-auto"
             style={{ display: "block" }}
           />
+          <p>{data.solution}</p>
           <div className="flex justify-center gap-3 mt-10">
             {[...Array(10).keys()].map((num) => (
               <div
@@ -170,20 +200,34 @@ export default function Home() {
                   className="bg-orange-500 px-8 py-2 rounded-full text-black font-bold"
                   onClick={restartGame}
                 >
-                  {isCorrect ? "Close" : "Restart"}
+                  Restart
                 </button>
-                {isCorrect ? null : (
-                  <Link href="/protected/leader-board">
-                    <button
-                      className="bg-orange-500 px-8 py-2 rounded-full text-black font-bold"
-                    >
-                      Finish
-                    </button>
-                  </Link>
-                )}
               </div>
             </div>
           </div>
+          {showFinishModal && (
+            <div
+              className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
+            >
+              <div
+                className="p-8 rounded-lg bg-white"
+                style={{ width: "400px" }}
+              >
+                <div className="text-4xl font-bold text-center mb-6">Correct!</div>
+                <div className="flex justify-center gap-3 mt-4">
+                  <button
+                    className="bg-orange-500 px-8 py-2 rounded-full text-black font-bold"
+                    onClick={() => {
+                      saveScore();
+                      setShowFinishModal(false);
+                    }}
+                  >
+                    Finish
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <p className="text-center">Loading...</p>
@@ -191,5 +235,4 @@ export default function Home() {
     </div>
   );
 }
-
 

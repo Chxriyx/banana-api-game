@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { createClient } from "@/utils/supabase/server";
+import { createClientServer } from "@/utils/supabase/server";
 import { signOutAction } from "@/app/actions";
 
 export default async function Home() {
-  const supabase = await createClient();
+  const supabase = await createClientServer();
 
   const {
     data: { user },

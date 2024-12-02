@@ -1,7 +1,31 @@
+'use client';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 
 export default function Home() {
+  const [scores, setScores] = useState([]);
+
+  useEffect(() => {
+    const fetchScores = async () => {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
+
+      const { data, error } = await supabase
+        .from("scores")
+        .select("user_email, score, difficulty")
+        .order("score", { ascending: false })
+        .limit(5);
+
+      if (error) console.error("Error fetching scores:", error);
+      else setScores(data);
+    };
+
+    fetchScores();
+  }, []);
+
   return (
     <div
       className="flex flex-col items-center min-h-screen bg-center justify-center"
@@ -18,27 +42,15 @@ export default function Home() {
       <h1 className="text-6xl font-bold bg-[#D9D9D9] bg-opacity-60 rounded-2xl p-6">
         Leader Board
       </h1>
-      <div className="bg-[#FFA500] bg-opacity-80 rounded-2xl mt-10 p-6 m-4 w-2/5">
-        <div className="flex items-center justify-between text-2xl py-4 mx-6">
-          <p className="font-bold text-3xl">Player One</p>
-          <p className="font-bold text-3xl">100</p>
-        </div>
-        <div className="flex items-center justify-between text-2xl py-4 mx-6">
-          <p className="font-bold text-3xl">Player Two</p>
-          <p className="font-bold text-3xl">80</p>
-        </div>
-        <div className="flex items-center justify-between text-2xl py-4 mx-6">
-          <p className="font-bold text-3xl">Player Three</p>
-          <p className="font-bold text-3xl">60</p>
-        </div>
-        <div className="flex items-center justify-between text-2xl py-4 mx-6">
-          <p className="font-bold text-3xl">Player Three</p>
-          <p className="font-bold text-3xl">60</p>
-        </div>
-        <div className="flex items-center justify-between text-2xl py-4 mx-6">
-          <p className="font-bold text-3xl">Player Three</p>
-          <p className="font-bold text-3xl">60</p>
-        </div>
+      <div className="bg-[#FFA500] bg-opacity-80 rounded-2xl mt-10 p-6 m-4 w-3/5">
+        <h2 className="text-4xl font-bold mb-4">Top five</h2>
+        {scores.map((score, index) => (
+          <div key={index} className="flex items-center justify-between text-2xl py-4 mx-6">
+            <p className="font-bold text-3xl">{score.user_email}</p>
+            <p className="font-bold text-3xl">{score.difficulty}</p>
+            <p className="font-bold text-3xl">{score.score}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

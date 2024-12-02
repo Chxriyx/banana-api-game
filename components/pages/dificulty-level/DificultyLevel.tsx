@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { createClientServer } from "@/utils/supabase/server";
 
-export default function Home() {
+
+export default async function Home() {
+  const supabase = await createClientServer();
+
+  const { data: { user }} = await supabase.auth.getUser();  
   return (
     <div
       className="flex flex-col items-center min-h-screen bg-center justify-around"
@@ -19,17 +24,17 @@ export default function Home() {
       Choose a Difficulty Level
       </h1>
         <div className="grid">
-            <Link href={{ pathname: "/protected/banana-game", query: { difficulty: "Easy" } }}>
+            <Link href={{ pathname: "/protected/banana-game", query: { difficulty: "Easy", user_email: user?.email } }}>
                 <Button className="bg-orange-500 px-24 py-12 rounded-full text-black font-bold mb-8">
                 <span className="text-5xl">Easy</span>
                 </Button>
             </Link>
-            <Link href={{ pathname: "/protected/banana-game", query: { difficulty: "Medium" } }}>
+            <Link href={{ pathname: "/protected/banana-game", query: { difficulty: "Medium", user_email: user?.email } }}>
                 <Button className="bg-orange-500 px-16 py-12 rounded-full text-black font-bold my-8">
                 <span className="text-5xl">Medium</span>
                 </Button>
             </Link>
-            <Link href={{ pathname: "/protected/banana-game", query: { difficulty: "Hard" } }}>
+            <Link href={{ pathname: "/protected/banana-game", query: { difficulty: "Hard", user_email: user?.email } }}>
                 <Button className="bg-orange-500 px-24 py-12 rounded-full text-black font-bold my-8">
                 <span className="text-5xl">Hard</span>
                 </Button>
