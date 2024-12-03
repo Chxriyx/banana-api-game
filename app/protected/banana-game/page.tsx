@@ -1,11 +1,11 @@
 import React from 'react'
 import { NextUIProvider } from '@nextui-org/react'
-import Home from '@/components/pages/play/Home'
+import BananaGame from '@/components/pages/banana-game/BananaGame'
 
 function page() {
   return (
     <NextUIProvider>
-      <Home/>
+        <BananaGame/>
     </NextUIProvider>
   )
 }
