@@ -15,7 +15,7 @@ export default function Home() {
 
       const { data, error } = await supabase
         .from("scores")
-        .select("user_email, score, difficulty")
+        .select("user_name, score, difficulty")
         .order("score", { ascending: false })
         .limit(5);
 
@@ -46,7 +46,7 @@ export default function Home() {
         <h2 className="text-4xl font-bold mb-4">Top five</h2>
         {scores.map((score, index) => (
           <div key={index} className="flex items-center justify-between text-2xl py-4 mx-6">
-            <p className="font-bold text-3xl">{score.user_email}</p>
+            <p className="font-bold text-3xl">{score.user_name}</p>
             <p className="font-bold text-3xl">{score.difficulty}</p>
             <p className="font-bold text-3xl">{score.score}</p>
           </div>

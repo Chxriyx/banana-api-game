@@ -36,7 +36,7 @@ export default async function Home() {
           <></>
         )}
       </div>
-      <Link href="/protected/user-name">
+      <Link href="/protected/dificulty-level">
           <Button className="bg-orange-500 px-24 py-12 rounded-full text-black font-bold block mr-4 flex justify-center animate-bounce">
             <span className="text-5xl">Play</span>
           </Button>

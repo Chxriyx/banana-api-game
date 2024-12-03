@@ -13,16 +13,16 @@ export default function Home() {
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
   const [showFinishModal, setShowFinishModal] = useState(false);
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     const difficulty = query.get("difficulty");
-    const userEmailParam = query.get("user_email");
+    const userNameParam = query.get("user_name");
 
-    if (userEmailParam) {
-      setUserEmail(userEmailParam);
+    if (userNameParam) {
+      setUserName(userNameParam);
     }
 
     switch (difficulty) {
@@ -116,7 +116,7 @@ export default function Home() {
     supabase
       .from("scores")
       .insert({
-        user_email: userEmail,
+        user_name: userName,
         difficulty,
         score: timeLeft,
       })
