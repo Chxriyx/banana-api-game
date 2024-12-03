@@ -9,6 +9,8 @@ export default async function Home() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  let metadata = user.user_metadata;
+  let name = metadata?.name;  
 
   return (
     <div
@@ -22,7 +24,7 @@ export default async function Home() {
         {user ? (
           <>
             <div className="flex items-center justify-center bg-[#FFC107] p-2 rounded-full mr-4">
-              <span className="text-sm font-bold">Welcome {user.email}!</span>
+              <span className="text-sm font-bold">Welcome {name}!</span>
             </div>
             <form action={signOutAction}>
               <Button type="submit" className="bg-orange-500 px-10 py-4 rounded-full text-black font-bold">

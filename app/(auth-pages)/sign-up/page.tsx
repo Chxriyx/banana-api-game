@@ -31,9 +31,15 @@ export default async function Signup(props: {
           <span className="mx-4">Back</span>
         </Button>
       </Link>
-    <h1 className="text-6xl font-bold bg-[#D9D9D9] bg-opacity-60 rounded-2xl p-6">Sign up</h1>
+      <h1 className="text-6xl font-bold bg-[#D9D9D9] bg-opacity-60 rounded-2xl p-6">Sign up</h1>
       <form>
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
+          <Input 
+            name="name" 
+            placeholder="Enter your name"
+            className="bg-[#D9D9D9] bg-opacity-60 rounded-2xl p-6 text-3xl placeholder:text-black"
+            required 
+          />
           <Input 
             name="email" 
             placeholder="Enter your email"
@@ -49,7 +55,7 @@ export default async function Signup(props: {
             required
           />
           <SubmitButton className="bg-orange-500 px-24 py-9 rounded-full text-black font-bold" formAction={signUpAction} pendingText="Signing up...">
-           <span className="text-3xl">Sign up</span>
+            <span className="text-3xl">Sign up</span>
           </SubmitButton>
           <FormMessage message={searchParams} />
         </div>
@@ -64,3 +70,4 @@ export default async function Signup(props: {
     </div>
   );
 }
+
